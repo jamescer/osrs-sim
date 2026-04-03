@@ -1,0 +1,87 @@
+.navbar {
+  background: linear-gradient(180deg, #1a1a2e 0%, #0a0e27 100%);
+  border-bottom: 3px solid;
+  border-image: linear-gradient(90deg, var(--osrs-gold), var(--osrs-stone), var(--osrs-gold)) 1;
+  padding: 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(212, 175, 55, 0.2);
+}
+
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  gap: 2rem;
+}
+
+.navbar-brand {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 2px;
+}
+
+.brand-text {
+  color: var(--osrs-gold);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+
+  &:hover {
+    color: var(--osrs-gold-light);
+    text-shadow: 0 0 12px rgba(212, 175, 55, 0.6);
+  }
+}
+
+.nav-menu {
+  list-style: none;
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.nav-item {
+  margin: 0;
+}
+
+.nav-link {
+  color: var(--osrs-text-primary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid transparent;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+
+  &:hover {
+    color: var(--osrs-gold);
+    border-bottom-color: var(--osrs-gold);
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.4);
+  }
+
+  &.active {
+    color: var(--osrs-gold);
+    border-bottom-color: var(--osrs-gold);
+    text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-container {
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .nav-menu {
+    gap: 1rem;
+  }
+}

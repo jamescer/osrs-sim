@@ -1,0 +1,24 @@
+<nav class="navbar">
+  <div class="navbar-container">
+    <div class="navbar-brand">
+      <a routerLink="/home" class="brand-text">OSRS Sim</a>
+    </div>
+    <ul class="nav-menu">
+      <li class="nav-item">
+        <a routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="nav-link">Home</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/casket-simulator" routerLinkActive="active" class="nav-link">Casket Simulator</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/quest-simulator" routerLinkActive="active" class="nav-link">Quest Simulator</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/slayer-simulator" routerLinkActive="active" class="nav-link">Slayer Simulator</a>
+      </li>
+      <li class="nav-item">
+        <a routerLink="/about" routerLinkActive="active" class="nav-link">About</a>
+      </li>
+    </ul>
+  </div>
+</nav>

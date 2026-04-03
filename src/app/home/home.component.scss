@@ -1,0 +1,115 @@
+:host {
+  display: block;
+  padding: 2rem;
+}
+
+.hero {
+  text-align: center;
+  margin-bottom: 3rem;
+  padding: 3rem 2rem;
+  background: linear-gradient(135deg, rgba(212, 175, 55, 0.1) 0%, rgba(139, 115, 85, 0.1) 100%);
+  border: 2px solid var(--osrs-gold);
+  border-radius: 4px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(212, 175, 55, 0.2);
+  position: relative;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--osrs-gold), var(--osrs-stone), var(--osrs-gold));
+    border-radius: 4px 4px 0 0;
+  }
+
+  h1 {
+    margin: 0 0 0.5rem 0;
+    font-size: 2.5rem;
+    color: var(--osrs-gold);
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+  }
+
+  p {
+    margin: 0;
+    font-size: 1.2rem;
+    color: var(--osrs-text-primary);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.6);
+  }
+}
+
+.simulators-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.simulator-card {
+  background: linear-gradient(135deg, rgba(26, 26, 46, 0.8) 0%, rgba(10, 14, 39, 0.9) 100%);
+  border: 2px solid var(--osrs-gold);
+  border-radius: 4px;
+  padding: 2rem;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(212, 175, 55, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--osrs-gold), rgba(212, 175, 55, 0));
+  }
+
+  &:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.7), 0 0 20px rgba(212, 175, 55, 0.3);
+    border-color: var(--osrs-gold-light);
+  }
+
+  h2 {
+    margin: 0 0 1rem 0;
+    color: var(--osrs-gold);
+    font-size: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  }
+
+  p {
+    margin: 0 0 1.5rem 0;
+    color: var(--osrs-text-primary);
+    line-height: 1.6;
+  }
+}
+
+.btn {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  border: 2px solid var(--osrs-gold);
+  background: linear-gradient(135deg, var(--osrs-dark) 0%, var(--osrs-brown) 100%);
+  color: var(--osrs-gold);
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: uppercase;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+
+  &-primary {
+    &:hover {
+      background: linear-gradient(135deg, var(--osrs-gold-dark) 0%, var(--osrs-gold) 100%);
+      color: var(--osrs-dark);
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(212, 175, 55, 0.4);
+      text-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+    }
+  }
+}

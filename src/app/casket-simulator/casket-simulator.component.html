@@ -1,0 +1,156 @@
+<div class="casket-simulator">
+  <!-- Header -->
+  <header class="simulator-header">
+    <h1>Clue Casket Simulator</h1>
+    <p class="subtitle">Open caskets and track your loot</p>
+  </header>
+
+  <!-- Controls Section -->
+  <div class="controls-section">
+    <!-- Casket Type Selection with Images -->
+    <div class="casket-selection">
+      <label class="section-label">Select Casket Difficulty:</label>
+      <div class="casket-buttons">
+        <button
+          *ngFor="let type of casketTypes"
+          [class.active]="selectedCasketType === type"
+          (click)="selectCasket(type)"
+          class="casket-button"
+          [title]="type"
+        >
+          <img [src]="getCasketImage(type)" [alt]="type" />
+          <span class="casket-label">{{ type | titlecase }}</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Quantity Input -->
+    <div class="quantity-section">
+      <label for="quantity" class="section-label"
+        >Number of Caskets to Open:</label
+      >
+      <div class="quantity-input-group">
+        <button (click)="quantity = Math.max(1, quantity - 1)" class="qty-btn">
+          -
+        </button>
+        <input
+          id="quantity"
+          type="number"
+          [(ngModel)]="quantity"
+          min="1"
+          class="quantity-input"
+        />
+        <button (click)="quantity = quantity + 1" class="qty-btn">+</button>
+      </div>
+    </div>
+
+    <!-- Action Buttons -->
+    <div class="action-buttons">
+      <button (click)="simulate()" class="btn btn-primary">
+        🎲 Simulate {{ quantity }}x
+      </button>
+      <button (click)="resetLoot()" class="btn btn-secondary">
+        🗑️ Reset Loot
+      </button>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content-wrapper">
+    <!-- Latest Opening (Right side) -->
+    <div class="latest-section" *ngIf="latestOpening">
+      <h2>Latest Opening</h2>
+      <div class="casket-info">
+        <img
+          [src]="getCasketImage(latestOpening.casketType)"
+          class="casket-display"
+        />
+        <p class="casket-type">
+          {{ latestOpening.casketType | titlecase }} Casket
+        </p>
+        <p class="item-count">Items: {{ latestOpening.items.length }}</p>
+      </div>
+
+      <div class="latest-loot">
+        <h3>Loot from this opening:</h3>
+        <ul class="item-list">
+          <li *ngFor="let item of latestOpening.items" class="item">
+            <img
+              [src]="getItemImage(item.name || item)"
+              [alt]="item.name || item"
+            />
+            <span class="item-name">{{ item.name || item }}</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Loot Tabs (Left side) -->
+    <div class="loot-section">
+      <!-- Tab Navigation -->
+      <div class="tab-navigation">
+        <button
+          [class.active]="activeTab === 'latest'"
+          (click)="switchTab('latest')"
+          class="tab-btn"
+        >
+          Latest Opening
+        </button>
+        <button
+          [class.active]="activeTab === 'total'"
+          (click)="switchTab('total')"
+          class="tab-btn"
+        >
+          Total Loot ({{ totalLoot.length }} unique items)
+        </button>
+      </div>
+
+      <!-- Tab Content -->
+      <div class="tab-content">
+        <!-- Latest Opening Tab -->
+        <div class="tab-pane" *ngIf="activeTab === 'latest'">
+          <div *ngIf="latestOpening; else noLatest" class="latest-tab">
+            <div class="loot-grid">
+              <div *ngFor="let item of latestOpening.items" class="loot-item">
+                <p class="item-name">{{ item.name || item }}</p>
+              </div>
+            </div>
+          </div>
+          <ng-template #noLatest>
+            <p class="empty-message">Open caskets to see latest rewards</p>
+          </ng-template>
+        </div>
+
+        <!-- Total Loot Tab -->
+        <div class="tab-pane" *ngIf="activeTab === 'total'">
+          <div
+            *ngIf="totalLoot.length > 0; else noLoot"
+            class="total-loot-grid"
+          >
+            <div *ngFor="let item of totalLoot" class="total-loot-item">
+              <div class="item-card">
+                <p class="item-name">{{ item.name }}</p>
+                <p class="item-quantity">{{ item.quantity }}x</p>
+              </div>
+            </div>
+          </div>
+          <ng-template #noLoot>
+            <p class="empty-message">No loot yet. Open some caskets!</p>
+          </ng-template>
+        </div>
+      </div>
+
+      <!-- Loot Summary -->
+      <div class="loot-summary" *ngIf="totalLoot.length > 0">
+        <div class="summary-stat">
+          <span class="label">Total Items Obtained:</span>
+        </div>
+        <div class="summary-stat">
+          <span class="label">Unique Items:</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Math global for template -->

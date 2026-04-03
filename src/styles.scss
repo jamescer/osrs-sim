@@ -1,0 +1,133 @@
+/* OSRS Themed Global Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap');
+
+/* Color Variables */
+:root {
+  --osrs-gold: #d4af37;
+  --osrs-gold-light: #f0d959;
+  --osrs-gold-dark: #b8860b;
+  --osrs-dark: #0a0e27;
+  --osrs-darker: #050812;
+  --osrs-brown: #3d2817;
+  --osrs-stone: #8b7355;
+  --osrs-stone-light: #a8825c;
+  --osrs-text-primary: #e8dcc4;
+  --osrs-text-secondary: #9d8b6d;
+  --osrs-border: #2a2416;
+  --osrs-accent: #d4af37;
+  --osrs-success: #4a9d4a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  width: 100%;
+  background: var(--osrs-darker);
+  color: var(--osrs-text-primary);
+  font-family: 'Lora', serif;
+  line-height: 1.6;
+}
+
+/* Medieval Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 12px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--osrs-darker);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--osrs-gold);
+  border-radius: 6px;
+
+  &:hover {
+    background: var(--osrs-gold-light);
+  }
+}
+
+/* Selection Color */
+::selection {
+  background: var(--osrs-gold);
+  color: var(--osrs-dark);
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--osrs-gold);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+  font-weight: 700;
+}
+
+h1 {
+  font-size: 2.5rem;
+  letter-spacing: 2px;
+}
+
+h2 {
+  font-size: 2rem;
+  letter-spacing: 1px;
+}
+
+h3 {
+  font-size: 1.5rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+p {
+  color: var(--osrs-text-primary);
+}
+
+a {
+  color: var(--osrs-gold);
+  text-decoration: none;
+  transition: color 0.3s ease;
+
+  &:hover {
+    color: var(--osrs-gold-light);
+    text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
+  }
+}
+
+/* Buttons */
+button {
+  font-family: 'Lora', serif;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+/* Forms */
+input,
+textarea,
+select {
+  font-family: 'Lora', serif;
+  background: var(--osrs-dark);
+  color: var(--osrs-text-primary);
+  border: 2px solid var(--osrs-gold);
+  padding: 0.75rem;
+  border-radius: 4px;
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
+    border-color: var(--osrs-gold-light);
+  }
+
+  &::placeholder {
+    color: var(--osrs-text-secondary);
+  }
+}
+

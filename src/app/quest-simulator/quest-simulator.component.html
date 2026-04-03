@@ -1,0 +1,122 @@
+<div class="quest-simulator">
+  <!-- Header -->
+  <header class="simulator-header">
+    <h1>Quest Simulator</h1>
+    <p class="subtitle">Search and explore all OSRS quests</p>
+  </header>
+
+  <div class="quest-container">
+    <!-- Search Section -->
+    <div class="search-section">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="searchQuests()"
+          placeholder="Search for a quest..."
+          class="search-input"
+        />
+        <span class="search-icon">🔍</span>
+      </div>
+      <p class="result-count">Found {{ filteredQuests.length }} quests</p>
+    </div>
+
+    <div class="content-wrapper">
+      <!-- Quest List (Left) -->
+      <div class="quest-list-section">
+        <div class="quest-list-header">
+          <h2>Quests</h2>
+          <span class="badge">{{ filteredQuests.length }}</span>
+        </div>
+
+        <div class="quest-list">
+          <div
+            *ngFor="let quest of filteredQuests"
+            (click)="selectQuest(quest)"
+            [class.active]="selectedQuest?.name === quest.name"
+            class="quest-item"
+            [title]="quest.name"
+          >
+            <span class="quest-name">{{ quest.name }}</span>
+            <span *ngIf="isMiniQuest(quest)" class="mini-badge">Mini</span>
+          </div>
+
+          <div *ngIf="filteredQuests.length === 0" class="no-results">
+            <p>No quests found. Try a different search.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quest Details (Right) -->
+      <div class="quest-details-section">
+        <div *ngIf="selectedQuest; else noSelection" class="quest-details">
+          <!-- Quest Title -->
+          <div class="details-header">
+            <h2>{{ selectedQuest.name }}</h2>
+            <span *ngIf="isMiniQuest(selectedQuest)" class="mini-badge-large">Mini Quest</span>
+            <button (click)="clearSelection()" class="close-btn">✕</button>
+          </div>
+
+          <!-- Quest Description -->
+          <div *ngIf="selectedQuest.description" class="detail-section">
+            <h3>Description</h3>
+            <p class="description">{{ selectedQuest.description }}</p>
+          </div>
+
+          <!-- Requirements -->
+          <div *ngIf="selectedQuest.requirements && selectedQuest.requirements.length > 0" class="detail-section">
+            <h3>Requirements</h3>
+            <div class="requirements-list">
+              <div *ngFor="let req of selectedQuest.requirements" class="requirement-item">
+                <span class="requirement-badge">⚡</span>
+                <span>{{ getRequirementLabel(req) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Rewards -->
+          <div *ngIf="selectedQuest.rewards && selectedQuest.rewards.length > 0" class="detail-section">
+            <h3>Rewards</h3>
+            <div class="rewards-list">
+              <div *ngFor="let reward of selectedQuest.rewards" class="reward-item">
+                <span class="reward-badge">🎁</span>
+                <span>{{ getRewardLabel(reward) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Steps -->
+          <div *ngIf="selectedQuest.steps && selectedQuest.steps.length > 0" class="detail-section">
+            <h3>Steps</h3>
+            <div class="steps-list">
+              <div *ngFor="let step of selectedQuest.steps; let idx = index" class="step-item">
+                <span class="step-number">{{ idx + 1 }}</span>
+                <p class="step-text">{{ step }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Additional Info -->
+          <div *ngIf="selectedQuest.questPoints" class="detail-section">
+            <h3>Quest Points</h3>
+            <p class="info-text">{{ selectedQuest.questPoints }} points</p>
+          </div>
+
+          <!-- Raw Data (Debug) -->
+          <details class="raw-data">
+            <summary>View Raw Data</summary>
+            <pre>{{ selectedQuest | json }}</pre>
+          </details>
+        </div>
+
+        <ng-template #noSelection>
+          <div class="no-selection">
+            <p class="empty-icon">🧭</p>
+            <h3>Select a Quest</h3>
+            <p>Choose a quest from the list on the left to view its details.</p>
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
