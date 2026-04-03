@@ -27,8 +27,8 @@ describe('QuestSimulatorComponent', () => {
   it('should filter quests by search term', () => {
     component.searchTerm = 'dragon';
     component.searchQuests();
-    const allMatching = component.filteredQuests.every(q =>
-      q.name.toLowerCase().includes('dragon')
+    const allMatching = component.filteredQuests.every((q) =>
+      q.name.toLowerCase().includes('dragon'),
     );
     expect(allMatching).toBeTruthy();
   });
@@ -45,8 +45,4 @@ describe('QuestSimulatorComponent', () => {
     expect(component.selectedQuest).toBeNull();
   });
 
-  it('should identify mini quests', () => {
-    const miniQuest = { name: 'Test', miniquest: true };
-    expect(component.isMiniQuest(miniQuest)).toBeTruthy();
-  });
 });

@@ -53,7 +53,9 @@
           <!-- Quest Title -->
           <div class="details-header">
             <h2>{{ selectedQuest.name }}</h2>
-            <span *ngIf="isMiniQuest(selectedQuest)" class="mini-badge-large">Mini Quest</span>
+            <span *ngIf="isMiniQuest(selectedQuest)" class="mini-badge-large"
+              >Mini Quest</span
+            >
             <button (click)="clearSelection()" class="close-btn">✕</button>
           </div>
 
@@ -64,10 +66,19 @@
           </div>
 
           <!-- Requirements -->
-          <div *ngIf="selectedQuest.requirements && selectedQuest.requirements.length > 0" class="detail-section">
+          <div
+            *ngIf="
+              selectedQuest.requirements &&
+              selectedQuest.requirements.length > 0
+            "
+            class="detail-section"
+          >
             <h3>Requirements</h3>
             <div class="requirements-list">
-              <div *ngFor="let req of selectedQuest.requirements" class="requirement-item">
+              <div
+                *ngFor="let req of selectedQuest.requirements"
+                class="requirement-item"
+              >
                 <span class="requirement-badge">⚡</span>
                 <span>{{ getRequirementLabel(req) }}</span>
               </div>
@@ -75,21 +86,36 @@
           </div>
 
           <!-- Rewards -->
-          <div *ngIf="selectedQuest.rewards && selectedQuest.rewards.length > 0" class="detail-section">
+          <div
+            *ngIf="getRewardsList() && getRewardsList().length > 0"
+            class="detail-section"
+          >
             <h3>Rewards</h3>
             <div class="rewards-list">
-              <div *ngFor="let reward of selectedQuest.rewards" class="reward-item">
-                <span class="reward-badge">🎁</span>
-                <span>{{ getRewardLabel(reward) }}</span>
+              <div
+                *ngFor="let reward of getRewardsList()"
+                [class]="'reward-item ' + getRewardTypeClass(reward.type)"
+              >
+                <span class="reward-icon">{{ reward.icon }}</span>
+                <div class="reward-content">
+                  <span class="reward-label">{{ reward.label }}</span>
+                  <span class="reward-value">{{ reward.value | number }}</span>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Steps -->
-          <div *ngIf="selectedQuest.steps && selectedQuest.steps.length > 0" class="detail-section">
+          <div
+            *ngIf="selectedQuest.steps && selectedQuest.steps.length > 0"
+            class="detail-section"
+          >
             <h3>Steps</h3>
             <div class="steps-list">
-              <div *ngFor="let step of selectedQuest.steps; let idx = index" class="step-item">
+              <div
+                *ngFor="let step of selectedQuest.steps; let idx = index"
+                class="step-item"
+              >
                 <span class="step-number">{{ idx + 1 }}</span>
                 <p class="step-text">{{ step }}</p>
               </div>
