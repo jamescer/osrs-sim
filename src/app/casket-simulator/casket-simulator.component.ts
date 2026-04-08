@@ -1,19 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import {
-  FormBuilder,
-  UntypedFormGroup,
-  ReactiveFormsModule,
-} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { ClueScrollHelper } from 'osrs-tools';
-import { OsrsAssetsService } from '../services/osrs-assets.service';
-
-interface CasketReward {
-  items: any[];
-  count: number;
-}
+import { ClueScrollHelper, Item, CasketReward } from 'osrs-tools';
 
 interface LootItem {
   name: string;
@@ -22,48 +11,47 @@ interface LootItem {
 }
 
 interface OpeningRecord {
-  casketType: string;
-  items: any[];
+  casketType: 'beginner' | 'easy' | 'medium' | 'hard' | 'elite' | 'master';
+  items: Item[];
   timestamp: Date;
+  reward: CasketReward;
+  openingNumber: number;
 }
 
 @Component({
   selector: 'app-casket-simulator',
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './casket-simulator.component.html',
   styleUrls: ['./casket-simulator.component.scss'],
 })
 export class CasketSimulatorComponent implements OnInit {
-  public selectedCasketType: string = 'easy';
+  public selectedCasketType:
+    | 'beginner'
+    | 'easy'
+    | 'medium'
+    | 'hard'
+    | 'elite'
+    | 'master' = 'easy';
   public quantity: number = 1;
-  public clueHelper = ClueScrollHelper;
-  public clueForm: UntypedFormGroup | undefined;
   public Math = Math;
 
-  public casketTypes: string[] = [
-    'beginner',
-    'easy',
-    'medium',
-    'hard',
-    'elite',
-    'master',
-  ];
+  public casketTypes: Array<
+    'beginner' | 'easy' | 'medium' | 'hard' | 'elite' | 'master'
+  > = ['beginner', 'easy', 'medium', 'hard', 'elite', 'master'];
 
   public totalLoot: LootItem[] = [];
-  public latestOpening: OpeningRecord | null = null;
-  public activeTab: 'latest' | 'total' = 'latest';
+  public activeTab: 'openings' | 'total' = 'openings';
   public openingHistory: OpeningRecord[] = [];
 
-  constructor(private fb: FormBuilder) {}
+  constructor() {}
 
   ngOnInit(): void {
-    this.clueForm = this.fb.group({
-      casketType: ['easy'],
-      quantity: [1],
-    });
+    // No setup needed yet; controls are template driven.
   }
 
-  public selectCasket(casketType: string): void {
+  public selectCasket(
+    casketType: 'beginner' | 'easy' | 'medium' | 'hard' | 'elite' | 'master',
+  ): void {
     this.selectedCasketType = casketType;
   }
 
@@ -72,40 +60,43 @@ export class CasketSimulatorComponent implements OnInit {
       this.quantity = 1;
     }
 
-    for (let i = 0; i < this.quantity; i++) {
-      const result = (this.clueHelper as any).openCasket(
-        this.selectedCasketType,
-      );
+    const allItems: Item[] = [];
 
-      // Update latest opening
-      this.latestOpening = {
+    // For each opening, simulate and record
+    for (let i = 0; i < this.quantity; i++) {
+      const reward = ClueScrollHelper.openCasket(this.selectedCasketType);
+      allItems.push(...reward.items);
+      const openingRecord: OpeningRecord = {
         casketType: this.selectedCasketType,
-        items: result.items,
+        items: reward.items,
         timestamp: new Date(),
+        reward,
+        openingNumber: this.openingHistory.length + 1,
       };
 
       // Add to history
-      this.openingHistory.unshift(this.latestOpening);
-
-      // Update total loot
-      this.updateTotalLoot(result.items);
+      this.openingHistory.unshift(openingRecord);
     }
 
-    // Switch to latest tab to show results
-    this.activeTab = 'latest';
+    // Update total loot with all items from simulations
+    this.updateTotalLoot(allItems);
+
+    // Switch to openings tab to show results
+    this.activeTab = 'openings';
   }
 
-  private updateTotalLoot(items: any[]): void {
+  private updateTotalLoot(items: Item[]): void {
     for (const item of items) {
-      const itemName = item.name || String(item);
+      const itemName = item.name;
+      const itemQuantity = this.getItemQuantity(item);
       const existingItem = this.totalLoot.find((l) => l.name === itemName);
 
       if (existingItem) {
-        existingItem.quantity++;
+        existingItem.quantity += itemQuantity;
       } else {
         this.totalLoot.push({
           name: itemName,
-          quantity: 1,
+          quantity: itemQuantity,
           image: this.getItemImage(itemName),
         });
       }
@@ -117,22 +108,41 @@ export class CasketSimulatorComponent implements OnInit {
 
   public resetLoot(): void {
     this.totalLoot = [];
-    this.latestOpening = null;
     this.openingHistory = [];
+    this.activeTab = 'openings';
   }
 
-  public getCasketImage(casketType: string): string {
-    // Convert item name to image filename (lowercase, hyphens)
+  public getCasketImage(
+    casketType: 'beginner' | 'easy' | 'medium' | 'hard' | 'elite' | 'master',
+  ): string {
     return `assets/items/reward-casket-${casketType.toLowerCase()}.png`;
   }
 
   public getItemImage(itemName: string): string {
-    // Convert item name to image filename (lowercase, hyphens)
     const filename = itemName.toLowerCase().replace(/ /g, '-');
     return `assets/items/${filename}.png`;
   }
 
-  public switchTab(tab: 'latest' | 'total'): void {
+  public switchTab(tab: 'openings' | 'total'): void {
     this.activeTab = tab;
+  }
+
+  public getItemQuantity(item: Item): number {
+    if (typeof item.quantity === 'number' && item.quantity > 0) {
+      return item.quantity;
+    }
+
+    return 1;
+  }
+
+  public getOpeningItemTotal(opening: OpeningRecord): number {
+    return opening.items.reduce(
+      (sum, item) => sum + this.getItemQuantity(item),
+      0,
+    );
+  }
+
+  public getTotalItemsObtained(): number {
+    return this.totalLoot.reduce((sum, item) => sum + item.quantity, 0);
   }
 }

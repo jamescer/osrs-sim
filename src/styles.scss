@@ -1,22 +1,24 @@
-/* OSRS Themed Global Styles */
+@import url("https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;700&family=Cardo:wght@400;700&display=swap");
 
-@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap');
-
-/* Color Variables */
 :root {
-  --osrs-gold: #d4af37;
-  --osrs-gold-light: #f0d959;
-  --osrs-gold-dark: #b8860b;
-  --osrs-dark: #0a0e27;
-  --osrs-darker: #050812;
-  --osrs-brown: #3d2817;
-  --osrs-stone: #8b7355;
-  --osrs-stone-light: #a8825c;
-  --osrs-text-primary: #e8dcc4;
-  --osrs-text-secondary: #9d8b6d;
-  --osrs-border: #2a2416;
-  --osrs-accent: #d4af37;
-  --osrs-success: #4a9d4a;
+  --osrs-gold: #c9a34e;
+  --osrs-gold-light: #e2c478;
+  --osrs-gold-dark: #8f6a2b;
+  --osrs-bg-1: #17100b;
+  --osrs-bg-2: #26170f;
+  --osrs-bg-3: #3a2517;
+  --osrs-panel: #2e1d12;
+  --osrs-panel-soft: #3a2819;
+  --osrs-wood: #5a3a24;
+  --osrs-stone: #7f6a53;
+  --osrs-text-primary: #eadfc8;
+  --osrs-text-secondary: #b7a487;
+  --osrs-border: #6e4b26;
+  --osrs-success: #73a84b;
+  --osrs-danger: #b4554d;
+  --osrs-shadow: rgba(0, 0, 0, 0.68);
+  --font-osrs: "RuneScape UF", "Cardo", "Georgia", serif;
+  --font-osrs-title: "RuneScape UF", "Cinzel", "Cardo", serif;
 }
 
 * {
@@ -29,62 +31,73 @@ html,
 body {
   height: 100%;
   width: 100%;
-  background: var(--osrs-darker);
+  background:
+    radial-gradient(
+      circle at 15% 0%,
+      rgba(136, 92, 41, 0.22) 0%,
+      transparent 42%
+    ),
+    linear-gradient(
+      160deg,
+      var(--osrs-bg-1),
+      var(--osrs-bg-2) 52%,
+      var(--osrs-bg-3)
+    );
+  background-attachment: fixed;
   color: var(--osrs-text-primary);
-  font-family: 'Lora', serif;
+  font-family: var(--font-osrs);
   line-height: 1.6;
 }
 
-/* Medieval Scrollbar Styling */
 ::-webkit-scrollbar {
-  width: 12px;
+  width: 13px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--osrs-darker);
+  background: linear-gradient(180deg, #261911, #1c130d);
+  border-left: 1px solid #4a3018;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--osrs-gold);
+  background: linear-gradient(180deg, #caa152, #8d6629);
   border-radius: 6px;
+  border: 1px solid #5f411f;
 
   &:hover {
-    background: var(--osrs-gold-light);
+    background: linear-gradient(180deg, #dfc078, #ad833b);
   }
 }
 
-/* Selection Color */
 ::selection {
   background: var(--osrs-gold);
-  color: var(--osrs-dark);
+  color: #1d1308;
+  text-shadow: none;
 }
 
-/* Typography */
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-  color: var(--osrs-gold);
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
-  font-weight: 700;
+  color: var(--osrs-gold-light);
+  font-family: var(--font-osrs-title);
+  font-weight: 500;
+  letter-spacing: 0.35px;
+  text-shadow: 1px 1px 0 rgba(20, 12, 8, 0.55);
 }
 
 h1 {
-  font-size: 2.5rem;
-  letter-spacing: 2px;
+  letter-spacing: 0.7px;
+  font-size: 2.55rem;
 }
 
 h2 {
-  font-size: 2rem;
-  letter-spacing: 1px;
+  font-size: 1.95rem;
 }
 
 h3 {
-  font-size: 1.5rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
+  font-size: 1.45rem;
 }
 
 p {
@@ -94,40 +107,50 @@ p {
 a {
   color: var(--osrs-gold);
   text-decoration: none;
-  transition: color 0.3s ease;
+  transition: color 0.2s ease;
 
   &:hover {
     color: var(--osrs-gold-light);
-    text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
   }
 }
 
-/* Buttons */
-button {
-  font-family: 'Lora', serif;
-  font-weight: 700;
-  letter-spacing: 1px;
-}
-
-/* Forms */
+button,
 input,
 textarea,
 select {
-  font-family: 'Lora', serif;
-  background: var(--osrs-dark);
-  color: var(--osrs-text-primary);
-  border: 2px solid var(--osrs-gold);
-  padding: 0.75rem;
-  border-radius: 4px;
+  font-family: var(--font-osrs);
+}
 
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 12px rgba(212, 175, 55, 0.4);
-    border-color: var(--osrs-gold-light);
-  }
+button {
+  cursor: pointer;
+}
+
+input,
+textarea,
+select {
+  color: var(--osrs-text-primary);
+  border: 2px solid var(--osrs-border);
+  border-radius: 6px;
+  padding: 0.75rem;
+  background: linear-gradient(180deg, #2f1f13, #22160d);
+  box-shadow: inset 0 1px 0 rgba(255, 220, 152, 0.08);
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
 
   &::placeholder {
     color: var(--osrs-text-secondary);
   }
+
+  &:focus {
+    outline: none;
+    border-color: var(--osrs-gold);
+    box-shadow: 0 0 0 2px rgba(201, 163, 78, 0.25);
+  }
 }
 
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}

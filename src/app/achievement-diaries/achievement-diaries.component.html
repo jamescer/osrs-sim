@@ -1,0 +1,91 @@
+<div class="diaries-page">
+  <header class="page-header">
+    <h1>Achievement Diaries</h1>
+    <p class="subtitle">Browse every OSRS diary and explore tasks by difficulty level</p>
+  </header>
+
+  <div class="diaries-layout">
+    <aside class="diary-list-panel">
+      <div class="search-wrap">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          (input)="searchDiaries()"
+          class="search-input"
+          placeholder="Search diaries..."
+        />
+      </div>
+
+      <p class="result-count">{{ filteredDiaries.length }} diaries</p>
+
+      <div class="diary-list">
+        <button
+          *ngFor="let diary of filteredDiaries"
+          type="button"
+          class="diary-list-item"
+          [class.active]="selectedDiary?.name === diary.name"
+          (click)="selectDiary(diary)"
+        >
+          <ng-container *ngIf="getDiaryIconPath(diary.name) as iconPath; else initialsIcon">
+            <img class="diary-icon" [src]="iconPath" [alt]="diary.name + ' icon'" />
+          </ng-container>
+
+          <ng-template #initialsIcon>
+            <span class="diary-initials">{{ getDiaryInitials(diary.name) }}</span>
+          </ng-template>
+
+          <span class="diary-name">{{ diary.name }}</span>
+          <span class="task-total">{{ getTotalTasks(diary) }} tasks</span>
+        </button>
+
+        <div *ngIf="filteredDiaries.length === 0" class="empty-list">
+          No diaries matched your search.
+        </div>
+      </div>
+    </aside>
+
+    <section class="diary-details-panel" *ngIf="selectedDiary as diary; else noSelection">
+      <div class="details-header">
+        <h2>{{ diary.name }}</h2>
+        <p>Total tasks: {{ getTotalTasks(diary) }}</p>
+      </div>
+
+      <div class="level-tabs">
+        <button
+          *ngFor="let level of levels"
+          type="button"
+          class="level-tab"
+          [class.active]="selectedLevel === level"
+          (click)="selectLevel(level)"
+        >
+          {{ formatLevel(level) }} ({{ getTaskCount(diary, level) }})
+        </button>
+      </div>
+
+      <div class="level-content" *ngIf="getSelectedLevelData() as levelData">
+        <div class="level-meta" *ngIf="levelData.itemReward || levelData.itemsRequired?.length || levelData.questsRequired?.length">
+          <p *ngIf="levelData.itemReward"><strong>Reward Item:</strong> {{ levelData.itemReward }}</p>
+          <p *ngIf="levelData.itemsRequired?.length"><strong>Items Required:</strong> {{ levelData.itemsRequired?.join(', ') }}</p>
+          <p *ngIf="levelData.questsRequired?.length"><strong>Quests Required:</strong> {{ levelData.questsRequired?.join(', ') }}</p>
+        </div>
+
+        <ol class="task-list">
+          <li *ngFor="let task of levelData.tasks" class="task-item">
+            <p class="task-description">{{ task.description }}</p>
+            <p *ngIf="task.notes" class="task-notes">{{ task.notes }}</p>
+            <p *ngIf="task.requirements?.length" class="task-req-count">
+              Requirements: {{ task.requirements?.length }}
+            </p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <ng-template #noSelection>
+      <section class="diary-details-panel empty-state">
+        <h2>No diary selected</h2>
+        <p>Select a diary from the left to view task details.</p>
+      </section>
+    </ng-template>
+  </div>
+</div>
