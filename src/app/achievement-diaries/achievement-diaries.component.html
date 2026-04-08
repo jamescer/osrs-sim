@@ -1,7 +1,16 @@
 <div class="diaries-page">
   <header class="page-header">
-    <h1>Achievement Diaries</h1>
-    <p class="subtitle">Browse every OSRS diary and explore tasks by difficulty level</p>
+    <h1>
+      <img
+        [src]="tabIconPaths.quest"
+        alt="Quest tab icon"
+        class="header-icon"
+      />
+      Achievement Diaries
+    </h1>
+    <p class="subtitle">
+      Browse every OSRS diary and explore tasks by difficulty level
+    </p>
   </header>
 
   <div class="diaries-layout">
@@ -26,13 +35,11 @@
           [class.active]="selectedDiary?.name === diary.name"
           (click)="selectDiary(diary)"
         >
-          <ng-container *ngIf="getDiaryIconPath(diary.name) as iconPath; else initialsIcon">
-            <img class="diary-icon" [src]="iconPath" [alt]="diary.name + ' icon'" />
-          </ng-container>
-
-          <ng-template #initialsIcon>
-            <span class="diary-initials">{{ getDiaryInitials(diary.name) }}</span>
-          </ng-template>
+          <img
+            class="diary-icon"
+            [src]="getDiaryIconPath(diary.name)"
+            [alt]="diary.name + ' icon'"
+          />
 
           <span class="diary-name">{{ diary.name }}</span>
           <span class="task-total">{{ getTotalTasks(diary) }} tasks</span>
@@ -44,9 +51,19 @@
       </div>
     </aside>
 
-    <section class="diary-details-panel" *ngIf="selectedDiary as diary; else noSelection">
+    <section
+      class="diary-details-panel"
+      *ngIf="selectedDiary as diary; else noSelection"
+    >
       <div class="details-header">
-        <h2>{{ diary.name }}</h2>
+        <h2>
+          <img
+            class="details-icon"
+            [src]="getDiaryIconPath(diary.name)"
+            [alt]="diary.name + ' icon'"
+          />
+          {{ diary.name }}
+        </h2>
         <p>Total tasks: {{ getTotalTasks(diary) }}</p>
       </div>
 
@@ -58,15 +75,35 @@
           [class.active]="selectedLevel === level"
           (click)="selectLevel(level)"
         >
+          <img
+            [src]="getLevelIconPath(level)"
+            [alt]="formatLevel(level) + ' icon'"
+            class="level-icon"
+          />
           {{ formatLevel(level) }} ({{ getTaskCount(diary, level) }})
         </button>
       </div>
 
       <div class="level-content" *ngIf="getSelectedLevelData() as levelData">
-        <div class="level-meta" *ngIf="levelData.itemReward || levelData.itemsRequired?.length || levelData.questsRequired?.length">
-          <p *ngIf="levelData.itemReward"><strong>Reward Item:</strong> {{ levelData.itemReward }}</p>
-          <p *ngIf="levelData.itemsRequired?.length"><strong>Items Required:</strong> {{ levelData.itemsRequired?.join(', ') }}</p>
-          <p *ngIf="levelData.questsRequired?.length"><strong>Quests Required:</strong> {{ levelData.questsRequired?.join(', ') }}</p>
+        <div
+          class="level-meta"
+          *ngIf="
+            levelData.itemReward ||
+            levelData.itemsRequired?.length ||
+            levelData.questsRequired?.length
+          "
+        >
+          <p *ngIf="levelData.itemReward">
+            <strong>Reward Item:</strong> {{ levelData.itemReward }}
+          </p>
+          <p *ngIf="levelData.itemsRequired?.length">
+            <strong>Items Required:</strong>
+            {{ levelData.itemsRequired?.join(", ") }}
+          </p>
+          <p *ngIf="levelData.questsRequired?.length">
+            <strong>Quests Required:</strong>
+            {{ levelData.questsRequired?.join(", ") }}
+          </p>
         </div>
 
         <ol class="task-list">

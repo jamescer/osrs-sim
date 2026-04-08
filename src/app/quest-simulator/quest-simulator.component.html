@@ -1,7 +1,10 @@
 <div class="quest-simulator">
   <!-- Header -->
   <header class="simulator-header">
-    <h1>Quest Simulator</h1>
+    <h1>
+      <img [src]="tabIconPaths.quest" alt="Quest tab icon" class="title-icon" />
+      Quest Simulator
+    </h1>
     <p class="subtitle">Search and explore all OSRS quests</p>
   </header>
 
@@ -16,7 +19,7 @@
           placeholder="Search for a quest..."
           class="search-input"
         />
-        <span class="search-icon">🔍</span>
+        <img [src]="tabIconPaths.quest" alt="Search icon" class="search-icon" />
       </div>
       <p class="result-count">Found {{ filteredQuests.length }} quests</p>
     </div>
@@ -79,7 +82,18 @@
                 *ngFor="let req of selectedQuest.requirements"
                 class="requirement-item"
               >
-                <span class="requirement-badge">⚡</span>
+                <ng-container *ngIf="req.type === RequirementType.Quest">
+                  <img
+                    src="assets/icons/ui/Quest_Points.png"
+                    [alt]="getRequirementLabel(req) + ' icon'"
+                  />
+                </ng-container>
+                <ng-container *ngIf="req.type === RequirementType.Level">
+                  <img
+                    src="assets/icons/tabs/Skills_Tab.png"
+                    [alt]="getRequirementLabel(req) + ' icon'"
+                  />
+                </ng-container>
                 <span>{{ getRequirementLabel(req) }}</span>
               </div>
             </div>
@@ -96,7 +110,11 @@
                 *ngFor="let reward of getRewardsList()"
                 [class]="'reward-item ' + getRewardTypeClass(reward.type)"
               >
-                <span class="reward-icon">{{ reward.icon }}</span>
+                <img
+                  class="reward-icon"
+                  [src]="reward.icon"
+                  [alt]="reward.label + ' icon'"
+                />
                 <div class="reward-content">
                   <span class="reward-label">{{ reward.label }}</span>
                   <span class="reward-value">{{ reward.value | number }}</span>
@@ -137,7 +155,11 @@
 
         <ng-template #noSelection>
           <div class="no-selection">
-            <p class="empty-icon">🧭</p>
+            <img
+              [src]="uiIconPaths.settings"
+              alt="No quest selected"
+              class="empty-icon"
+            />
             <h3>Select a Quest</h3>
             <p>Choose a quest from the list on the left to view its details.</p>
           </div>

@@ -14,9 +14,19 @@
   border-radius: 4px;
 
   h1 {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
     margin: 0 0 0.5rem 0;
     font-size: 2.5rem;
     color: var(--osrs-gold);
+
+    .title-icon {
+      width: 34px;
+      height: 34px;
+      object-fit: contain;
+      image-rendering: pixelated;
+    }
   }
 
   .subtitle {
@@ -69,8 +79,10 @@
     right: 1rem;
     top: 50%;
     transform: translateY(-50%);
-    color: var(--osrs-gold);
-    font-size: 1.2rem;
+    width: 20px;
+    height: 20px;
+    object-fit: contain;
+    image-rendering: pixelated;
   }
 
   .result-count {
@@ -196,9 +208,11 @@
     padding: 3rem 2rem;
 
     .empty-icon {
-      font-size: 3rem;
+      width: 56px;
+      height: 56px;
       margin-bottom: 1rem;
-      color: var(--osrs-gold);
+      object-fit: contain;
+      image-rendering: pixelated;
     }
 
     h3 {
@@ -290,9 +304,11 @@
 
       .requirement-badge,
       .reward-icon {
-        font-size: 1.1rem;
-        min-width: 1.5rem;
-        text-align: center;
+        width: 22px;
+        height: 22px;
+        min-width: 22px;
+        object-fit: contain;
+        image-rendering: pixelated;
       }
 
       .reward-content {

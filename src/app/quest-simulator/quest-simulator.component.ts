@@ -3,13 +3,20 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuestTool } from 'osrs-tools';
 import { Quest } from 'osrs-tools/quest';
-
+import { RequirementType } from 'osrs-tools/quest';
 interface RequirementData {
   skillName?: string;
+  skill?: string;
   level?: number;
+  requiredLevel?: number;
+  skillLevel?: number;
   questName?: string;
+  quest?: string;
+  name?: string;
   questRequired?: number;
   itemRequired?: boolean;
+  item?: unknown;
+  itemsRequired?: unknown[];
   [key: string]: any;
 }
 
@@ -32,6 +39,46 @@ export class QuestSimulatorComponent implements OnInit {
   selectedQuest: Quest | null = null;
   searchTerm: string = '';
   questTool = QuestTool;
+
+  public readonly RequirementType = RequirementType;
+
+  readonly skillIconPaths: Record<string, string> = {
+    agility: 'assets/icons/skills/Agility_icon.png',
+    attack: 'assets/icons/skills/Attack_icon.png',
+    construction: 'assets/icons/skills/Construction_icon.png',
+    cooking: 'assets/icons/skills/Cooking_icon.png',
+    crafting: 'assets/icons/skills/Crafting_icon.png',
+    defence: 'assets/icons/skills/Defence_icon.png',
+    farming: 'assets/icons/skills/Farming_icon.png',
+    firemaking: 'assets/icons/skills/Firemaking_icon.png',
+    fishing: 'assets/icons/skills/Fishing_icon.png',
+    fletching: 'assets/icons/skills/Fletching_icon.png',
+    herblore: 'assets/icons/skills/Herblore_icon.png',
+    hitpoints: 'assets/icons/skills/Hitpoints_icon.png',
+    magic: 'assets/icons/skills/Magic_icon.png',
+    mining: 'assets/icons/skills/Mining_icon.png',
+    prayer: 'assets/icons/skills/Prayer_icon.png',
+    ranged: 'assets/icons/skills/Ranged_icon.png',
+    sailing: 'assets/icons/skills/Sailing_icon.png',
+    slayer: 'assets/icons/skills/Slayer_icon.png',
+    smithing: 'assets/icons/skills/Smithing_icon.png',
+    strength: 'assets/icons/skills/Strength_icon.png',
+    thieving: 'assets/icons/skills/Thieving_icon.png',
+    woodcutting: 'assets/icons/skills/Woodcutting_icon.png',
+  };
+
+  readonly tabIconPaths = {
+    quest: 'assets/icons/tabs/Quest_Tab.png',
+    inventory: 'assets/icons/tabs/Inventory_Tab.png',
+    skills: 'assets/icons/tabs/Skills_Tab.png',
+  };
+
+  readonly uiIconPaths = {
+    bank: 'assets/icons/ui/Bank.png',
+    questPoints: 'assets/icons/ui/Quest_Points.png',
+    music: 'assets/icons/ui/Music.png',
+    settings: 'assets/icons/ui/Settings.png',
+  };
 
   ngOnInit(): void {
     this.loadAllQuests();
@@ -69,16 +116,44 @@ export class QuestSimulatorComponent implements OnInit {
   }
 
   getRequirementLabel(req: RequirementData): string {
-    if (req.skillName) {
-      return `${req.skillName} Level ${req.level || 0}`;
+    const skill = req.skillName ?? req.skill;
+    const level = req.level ?? req.requiredLevel ?? req.skillLevel;
+
+    if (skill && level !== undefined && level !== null) {
+      return `${this.formatSkillName(skill)} Level ${level}`;
     }
-    if (req.questName) {
-      return `Quest: ${req.questName}`;
+
+    if (skill) {
+      return this.formatSkillName(skill);
     }
-    if (req.itemRequired) {
+
+    const questName = req.questName ?? req.quest ?? req.name;
+    if (questName) {
+      return `Quest: ${questName}`;
+    }
+
+    if (req.itemRequired || req.item || req.itemsRequired?.length) {
       return 'Item Required';
     }
+
     return JSON.stringify(req);
+  }
+
+  getRequirementIconPath(req: RequirementData): string {
+    const skill = req.skillName ?? req.skill;
+    if (skill) {
+      return this.getSkillIconPath(skill) || this.tabIconPaths.skills;
+    }
+
+    if (req.questName ?? req.quest ?? req.name) {
+      return this.tabIconPaths.quest;
+    }
+
+    if (req.itemRequired || req.item || req.itemsRequired?.length) {
+      return this.tabIconPaths.inventory;
+    }
+
+    return this.uiIconPaths.settings;
   }
 
   /**
@@ -93,11 +168,13 @@ export class QuestSimulatorComponent implements OnInit {
     // Handle skill rewards (experience/xp in specific skills)
     if (rewardObj.experience) {
       Object.entries(rewardObj.experience).forEach(([skill, xp]) => {
+        const iconPath =
+          this.getSkillIconPath(skill) || this.tabIconPaths.skills;
         rewards.push({
           type: 'skill',
           label: `${this.formatSkillName(skill)} Experience`,
           value: Number(xp),
-          icon: '✨',
+          icon: iconPath,
         });
       });
     }
@@ -108,7 +185,7 @@ export class QuestSimulatorComponent implements OnInit {
         type: 'questpoints',
         label: 'Quest Points',
         value: Number(rewardObj.questPoints),
-        icon: '🎯',
+        icon: this.uiIconPaths.questPoints,
       });
     }
 
@@ -121,7 +198,7 @@ export class QuestSimulatorComponent implements OnInit {
           type: 'item',
           label: quantity > 1 ? `${name} (x${quantity})` : name,
           value: Number(quantity),
-          icon: '📦',
+          icon: this.tabIconPaths.inventory,
         });
       });
     }
@@ -132,7 +209,7 @@ export class QuestSimulatorComponent implements OnInit {
         type: 'money',
         label: 'Coins',
         value: Number(rewardObj.coins),
-        icon: '💰',
+        icon: this.uiIconPaths.bank,
       });
     }
 
@@ -144,7 +221,7 @@ export class QuestSimulatorComponent implements OnInit {
           type: 'misc',
           label: this.formatLabel(key),
           value: JSON.stringify(value),
-          icon: '🎁',
+          icon: this.uiIconPaths.music,
         });
       }
     });
@@ -160,6 +237,19 @@ export class QuestSimulatorComponent implements OnInit {
       .split('_')
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
       .join(' ');
+  }
+
+  private getSkillIconPath(skillName: string): string | null {
+    const normalizedSkill = skillName.toLowerCase().trim().replace(/\s+/g, '_');
+
+    const directMatch = this.skillIconPaths[normalizedSkill];
+    if (directMatch) {
+      return directMatch;
+    }
+
+    const noUnderscoreMatch =
+      this.skillIconPaths[normalizedSkill.replace(/_/g, '')];
+    return noUnderscoreMatch || null;
   }
 
   /**

@@ -54,6 +54,18 @@ export class AchievementDiariesComponent implements OnInit {
     'Wilderness Diary': 'Wilderness_Diary.png',
   };
 
+  readonly tabIconPaths = {
+    quest: 'assets/icons/tabs/Quest_Tab.png',
+    skills: 'assets/icons/tabs/Skills_Tab.png',
+  };
+
+  readonly levelIconPaths: Record<DiaryLevelKey, string> = {
+    easy: 'assets/icons/skills/Agility_icon.png',
+    medium: 'assets/icons/skills/Strength_icon.png',
+    hard: 'assets/icons/skills/Defence_icon.png',
+    elite: 'assets/icons/skills/Slayer_icon.png',
+  };
+
   ngOnInit(): void {
     this.loadDiaries();
   }
@@ -113,19 +125,13 @@ export class AchievementDiariesComponent implements OnInit {
     return this.getTaskCount(diary, 'easy') + this.getTaskCount(diary, 'medium') + this.getTaskCount(diary, 'hard') + this.getTaskCount(diary, 'elite');
   }
 
-  getDiaryIconPath(diaryName: string): string | null {
+  getDiaryIconPath(diaryName: string): string {
     const icon = this.diaryIconMap[diaryName];
-    return icon ? `assets/icons/diaries/${icon}` : null;
+    return icon ? `assets/icons/diaries/${icon}` : this.tabIconPaths.quest;
   }
 
-  getDiaryInitials(diaryName: string): string {
-    return diaryName
-      .replace(' Diary', '')
-      .split(/\s|&/)
-      .filter(Boolean)
-      .map((word) => word.charAt(0).toUpperCase())
-      .join('')
-      .slice(0, 3);
+  getLevelIconPath(level: DiaryLevelKey): string {
+    return this.levelIconPaths[level];
   }
 
   formatLevel(level: DiaryLevelKey): string {
